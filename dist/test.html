@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+
+<head>
+    <title>test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css" media="screen">
+        html,
+        body {
+            background-color: #ffffff;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .btngroup {
+			width: 800px;
+            background-color: #fff;
+            text-align: center;
+        }
+		
+/**腾讯播放器尺寸**/
+#flashContent {
+	width: 1390px;
+	height: 782px;
+	text-align:center;
+	background-color:#ccc;
+}
+@media (max-width:1789px){
+#flashContent {
+	width: 1180px;
+	height: 664px;
+}
+}
+@media (max-width:1549px){
+#flashContent {
+	width: 880px;
+	height: 495px;
+}
+}
+@media (max-width:1269px){
+#flashContent {
+	width: 667px;
+	height: 375px;
+}
+}
+    </style>
+</head>
+
+<body>
+    <div id="flashContent">
+    </div>
+    <div class="btngroup" id="btngroup">
+        
+            <div><input type="text" style="width:400px;margin-right:40px" value="{'font': '2', 'color': '1', 'position': '1' }" id="ia0"><button id="ta0_1" type="button" alt="设置弹幕形式">顶部</button><button id="ta0_2" >中间</button><button id="ta0_3" >底部</button></div>
+            <div><input type="text" style="width:400px;margin-right:40px" placeholder="在此输入弹幕字符串" id="ia1"><button id="ta1" type="button" alt="发送弹幕文字">发送弹幕文字</button></div>
+            <div><input type="text"  placeholder="在此输入打点字符串" id="ia3"><input type="text" placeholder="打点时间/秒" id="ia3_"><button id="ta3" type="button" alt="添加打点">添加打点</button></div>
+            <div><button id="ta4" type="button" alt="设置开关灯">切换开关灯</button></div>
+        
+        
+            <div><button id="tb0" type="button" alt="获取是否播放">获取是否播放</button></div>
+            <div><button id="tb1" type="button" alt="获取当前时间">获取当前时间</button></div>
+            <div><button id="tb2" type="button" alt="获取直播已观看时长">获取直播已观看时长</button></div>
+            <div><button id="tb3" type="button" alt="获取是否全屏">获取是否全屏</button></div>
+            <div><button id="tb4" type="button" alt="获取当前音量">获取当前音量</button></div>
+        
+        
+            <div><button id="tc0" type="button" alt="播放">play2</button></div>
+            <div><button id="tc1" type="button" alt="暂停">pause2</button></div>
+            <div><button id="tc2" type="button" alt="跳转">seek2</button><input type="text" style="width:100px;margin-right:40px" placeholder="在此输入要跳转到的时间，单位秒" id="ic2">秒</div>
+    </div>
+    <script src="./player/rtmpPlayer.js"></script>
+    <script>
+        var jsReady = false;//dom是否已经渲染完成
+        var swfReady = false;//swf是否加载
+		function thisMovie(movieName) {
+        if (navigator.appName.indexOf("Microsoft") != -1) {
+            return window[movieName];
+        } else {
+            return document[movieName];
+        }
+    }
+        window.onload = function() {
+            var myflashVars = {
+				video:[
+					['rtmp://live.hkstv.hk.lxdns.com/live/hks','标清'],
+					['rtmp://120.26.91.134:1935/live/14_0_hs','高清'],
+					['rtmp://120.26.91.134:1935/vod/mp4:2_0_hs_0_1500444901_179.mp4','超清']
+				],
+                lv: 0, //0普通形式 1=直播形式 默认是0 ，直播时播放器的进度条将被锁定/隐藏。显示时间的文本内容也显示为= 已播放时长/60：00
+                wh: '16:9', //默认比例  可选1：1原始视频流比例  4：3  
+                v: 0.2, //默认音量   
+                c: 2, //默认清晰度   0标清,1高清,2超清
+                p: 0, //默认自动播放 数值 0 默认不自动播放 1加载后播放 2 默认播放
+                h: 0, //是否支持随意拖动进度条 默认支持 1为不支持
+                tm: true, //默认是否开启设置弹幕  默认true是开启 false不开启
+                configtm: {'font': '2', 'color': '1', 'position': '1' }, //默认弹幕设置 (position: 1顶部 2中间  3底部）
+                tmdefault: '你好，欢迎使用本播放器', //默认tm幕
+                start: 0, //默认从指定时间点开始播放 
+                thumbtime: 5, //设置缩略图多久产生一个 单位秒 默认3秒,
+                subtitles: [], //设置字幕[{'BeginTime':5,'EndTime':10,'Text':'我是测试字幕，将显示在第5-10秒'},{'BeginTime':11,'EndTime':19,'Text':'我是测试字幕，将显示在第11-19秒'}]
+                dots: [] //默认打点列表[{'Time':80,'DotText':'我是打点文字'}]
+
+            };
+            RTMPPlayer.embed('./player/rtmplayer.swf?random='+Math.random()*100, 'flashContent', 'rtmpPlayer', myflashVars)
+            jsReady = true;
+        }
+		//必须：告诉flash dom渲染完成
+        function isReady() {
+            return jsReady;
+        }
+		//必须：light仅供参考(如不需要开关灯，可以省略)
+		function light(c){
+			if(c){
+			document.getElementById('btngroup').style.background="white";
+			//...
+			}else{
+			document.getElementById('btngroup').style.background="black";
+			//...
+			}
+		}
+        //输出东西供flash调试，可省略
+        function consolesome(b) {
+		console.log(b);
+            if (typeof b == 'string'||typeof b == 'number') {
+            } else {
+                alert('consolesome参数错误，应该是字符串')
+            }
+        }
+		//flash加载完成后会调用这个js函数，您可以在此添加一些逻辑，比如用js控制
+        function setSWFIsReady() {
+            swfReady = true;
+            doInterface();
+        }
+		
+		 function flashVars() {
+		 console.log('flashVars被调用')
+            RTMPPlayer.flashVars()
+        }
+function strToJson(str){
+var json = eval('(' + str + ')');
+return json;
+} 
+        function doInterface() {
+            console.log('swfReady')
+			//弹幕设置
+            document.getElementById('ta0_1').onclick = function(event) {
+		   event = event || window.event;
+                RTMPPlayer.configTm({'font': '2', 'color': '1', 'position': '1' })
+            }
+			 document.getElementById('ta0_2').onclick = function(event) {
+				event = event || window.event;
+                RTMPPlayer.configTm({'font': '2', 'color': '1', 'position': '2' })
+            }
+		   document.getElementById('ta0_3').onclick = function(event) {
+			    event = event || window.event;
+                RTMPPlayer.configTm({'font': '2', 'color': '1', 'position': '3' })
+            }
+            document.getElementById('ta1').onclick = function(event) {
+			event = event || window.event;
+                RTMPPlayer.setTm( document.getElementById('ia1').value);
+            }
+			/*
+            document.getElementById('ta2').onclick = function() {
+                RTMPPlayer.addSubtitle()
+            }*/
+			//添加打点
+            document.getElementById('ta3').onclick = function(event) {
+			event = event || window.event;
+			var dotDemo={"DotText":document.getElementById('ia3').value||"","Time":parseInt(document.getElementById('ia3_').value||0)};
+               RTMPPlayer.adddot(dotDemo);
+				
+            }
+			//开关灯
+            document.getElementById('ta4').onclick = function(event) {
+			event = event || window.event;
+                RTMPPlayer.setLight();
+				if(RTMPPlayer.getLight()){
+			document.getElementById('btngroup').style.background="white";
+			//...
+			}else{
+			document.getElementById('btngroup').style.background="black";
+			//...
+			}
+            }
+			//播放状态
+            document.getElementById('tb0').onclick = function(event) {
+			event = event || window.event;
+			console("当前播放状态是："+RTMPPlayer.getPlayStatu());
+                
+            }
+			//当前秒数
+            document.getElementById('tb1').onclick = function(event) {
+			event = event || window.event;
+                alert("当前播放到"+RTMPPlayer.getiNowTime()+"秒");
+            }
+			//获取已观看时长
+            document.getElementById('tb2').onclick = function(event) {
+			event = event || window.event;
+                alert(RTMPPlayer.getSeeTimes());
+            }
+			//全屏状态
+            document.getElementById('tb3').onclick = function(event) {
+			event = event || window.event;
+               alert("当前处于全屏状态"+ RTMPPlayer.getFullStatu());
+            }
+			//音量
+            document.getElementById('tb4').onclick = function(event) {
+			event = event || window.event;
+                alert("当前音量是："+RTMPPlayer.getVolume());
+            }
+			//播放
+            document.getElementById('tc0').onclick = function(event) {
+			event = event || window.event;
+                RTMPPlayer.play2();
+            }
+			//暂停
+            document.getElementById('tc1').onclick = function(event) {
+			event = event || window.event;
+                RTMPPlayer.pause2();
+            }
+			//
+            document.getElementById('tc2').onclick = function(event) {
+			event = event || window.event;
+                RTMPPlayer.seek2(document.getElementById('ic2').value||0);
+            }
+        }
+    </script>
+</body>
+
+</html>
