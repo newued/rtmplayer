@@ -159,7 +159,7 @@ step4:添加交互代码
 详情见接口说明文档和操作文档
 ### Contact 联系作者:
 
-#### ![arthur-wang-前端开发多媒体开发工程师](https://avatars3.githubusercontent.com/u/19658614?s=400&v=4) 
+#### ![arthur-wang-前端开发多媒体开发工程师](https://avatars3.githubusercontent.com/u/19658614?s=50&v=1) 
 
 微信:wzk-1314
 
